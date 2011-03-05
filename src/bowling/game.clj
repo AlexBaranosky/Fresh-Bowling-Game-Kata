@@ -6,10 +6,10 @@
 (defn- replace-last [seq item]
   (conj (vec (drop-last 1 seq)) item))
   
-(defvar- frames (atom [[] [] [] [] [] [] [] [] [] []]))
+(defvar- frames (atom [[]]))
   
 (defn start-game []
-  )
+  (reset! frames [[]]))
   
 (defn add-roll [frames pins-hit]  
   (if (= 2 (count (last frames)))
@@ -23,6 +23,17 @@
    (doseq [i (repeat times pins-hit)]
     (score-roll i))) 
    
-(defn score-game []
-  (sum (map sum @frames)))
+(defn- spare? [frame]
+  (and (= 2 (count frame)) (= 10 (sum frame))))   
    
+(defn- score-frame [frames idx frame]
+  (if (and (spare? frame) (< idx 9))
+    (+ (sum frame) (first (get frames (inc idx))))
+	(sum frame)))
+   
+(defn- score-for-each-frame [frames]
+  (map-indexed (partial score-frame frames) frames))  
+   
+(defn score-game []
+  (prn (count @frames))
+  (sum (score-for-each-frame @frames)))

@@ -7,7 +7,7 @@
   (roll 0 :times 20)
   (score-game) => 0)
 
-(fact "score 20 when all rolls of one pin"
+(fact "score 20 when every roll knocks down 1 pin"
   (start-game)
   (roll 1 :times 20)
   (score-game) => 20)
