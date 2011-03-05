@@ -2,7 +2,7 @@
   (:use bowling.game)
   (:use midje.sweet))
 	
-(fact "scores 0 when no pins knocked down for whole game"
+(fact "score 0 when no pins knocked down for whole game"
   (start-game)
   (roll 0 :times 20)
   (score-game) => 0)
@@ -14,14 +14,14 @@
 
 (fact "counts the roll after a spare twice"
   (start-game)
-  (roll-spare)
+  (roll 5 :times 2)
   (roll 3)
   (roll 0 :times 16)
   (score-game) => 16)
 
 (fact "counts the two rolls afer a strike twice"
   (start-game)
-  (roll-strike)
+  (roll 10)
   (roll 3)
   (roll 4)
   (roll 0 :times 16)
