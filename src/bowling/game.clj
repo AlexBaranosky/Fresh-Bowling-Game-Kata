@@ -1,7 +1,11 @@
-(ns bowling.game
-  ;(:use sportello.collection-utils)
-  ;(:require [clojure.string :as str])
-  )
+(ns bowling.game)
   
-(defn one-plus-one []
-  (+ 1 1))
+(defn start-game []
+  )  
+  
+(defn roll [pins-hit]
+   )
+   
+(defn score-game []
+  0)
+   
