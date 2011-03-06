@@ -1,10 +1,7 @@
 (ns bowling.game
   (:use clojure.contrib.def))
   
-(defvar- sum (partial reduce +))  
-  
-(defn- replace-last [seq item]
-  (conj (vec (drop-last 1 seq)) item))  
+(defvar- sum (partial reduce +))
   
 (defvar- frames (atom [[]]))
 
@@ -19,7 +16,7 @@
   (if (and (not= 10 (count frames)) 
            (or (= 2 (count (last frames))) (strike? (last frames))))
       (conj frames [pins-hit])
-	  (replace-last frames (conj (last frames) pins-hit))))
+	  (assoc frames (dec (count frames)) (conj (last frames) pins-hit)))) 
   
 (defn- score-frame [frame next-frame third-frame]
   (cond (and (strike? frame) next-frame) 
