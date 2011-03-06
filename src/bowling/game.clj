@@ -35,8 +35,8 @@
   (reset! frames [[]]))		
 		
 (defnk roll! [pins-hit :times 1]
-   (doseq [i (repeat times pins-hit)]
-    (add-roll-to-frames! i))) 
+  (dotimes [i times] 
+    (add-roll-to-frames! pins-hit))) 
    
 (defn score-game []
   (let [score-for-each-frame (map-indexed (partial score-frame @frames) @frames)]
