@@ -7,9 +7,6 @@
   (conj (vec (drop-last 1 seq)) item))
   
 (defvar- frames (atom [[]]))
-  
-(defn start-game []
-  (reset! frames [[]]))
 
 (defn- all-pins-down-and-on-nth-roll? [nth-roll frame]
   (and (= nth-roll (count frame)) (= 10 (sum frame))))   
@@ -23,9 +20,9 @@
       (conj frames [pins-hit])
 	  (replace-last frames (conj (last frames) pins-hit))))
   
-(defn score-roll [pins-hit]
+(defn- add-roll-to-frames! [pins-hit]
   (swap! frames add-roll-to-frames pins-hit))
-   
+  
 (defn- score-frame [frames idx frame]
   (cond (and (spare? frame) (< idx 9))
         (+ (sum frame) (first (frames (inc idx))))
@@ -33,6 +30,13 @@
         (+ (sum frame) (first (frames (inc idx))) (second (frames (inc idx))))
 		:else
 	    (sum frame)))
+
+(defn start-game! []
+  (reset! frames [[]]))		
+		
+(defnk roll! [pins-hit :times 1]
+   (doseq [i (repeat times pins-hit)]
+    (add-roll-to-frames! i))) 
    
 (defn score-game []
   (let [score-for-each-frame (map-indexed (partial score-frame @frames) @frames)]
