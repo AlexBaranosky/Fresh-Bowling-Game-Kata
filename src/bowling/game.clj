@@ -4,7 +4,7 @@
 (defvar- sum (partial reduce +))  
   
 (defn- replace-last [seq item]
-  (conj (vec (drop-last 1 seq)) item))
+  (conj (vec (drop-last 1 seq)) item))  
   
 (defvar- frames (atom [[]]))
 
@@ -50,5 +50,5 @@
     (add-roll-to-frames! pins-hit))) 
    
 (defn score-game []
-  (let [next-frames (conj (vec (rest @frames)) nil)]
+  (let [next-frames (concat (rest @frames) [nil])]
     (sum (map score-frame @frames next-frames))))
