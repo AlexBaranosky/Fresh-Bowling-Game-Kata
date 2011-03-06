@@ -15,9 +15,9 @@
 
 (defvar- strike? (partial all-pins-down-and-on-nth-roll? 1)) 
   
-(defn- add-roll-to-frames [frames pins-hit]  
-  (if (or (and (= 2 (count (last frames))) (not= 10 (count frames))) 
-          (and (strike? (last frames)) (not= 10 (count frames))))
+(defn- add-roll-to-frames [frames pins-hit]        
+  (if (and (not= 10 (count frames)) 
+           (or (= 2 (count (last frames))) (strike? (last frames))))
       (conj frames [pins-hit])
 	  (replace-last frames (conj (last frames) pins-hit))))
   
