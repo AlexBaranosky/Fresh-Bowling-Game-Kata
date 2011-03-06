@@ -23,16 +23,21 @@
 (defn- add-roll-to-frames! [pins-hit]
   (swap! frames add-roll-to-frames pins-hit))
   
-(defn- additional-spare-or-strike-points [frames idx frame]
-  (cond (and (spare? frame) (< idx 9))
-        (first (frames (inc idx)))
-		(and (strike? frame) (< idx 9))
-        (+ (first (frames (inc idx))) (second (frames (inc idx))))
-		:else
-		0 ))  
+(defn- kind-of-roll [frames idx frame]
+  (cond (and (strike? frame) (< idx 9)) :strike
+        (and (spare? frame) (< idx 9))  :spare
+		:else                           :standard))  
   
-(defn- score-frame [frames idx frame]
-  (+ (sum frame) (additional-spare-or-strike-points frames idx frame)))	
+(defmulti score-frame kind-of-roll)  
+  
+(defmethod score-frame :standard [frames idx frame]
+  (sum frame)) 
+
+(defmethod score-frame :spare [frames idx frame]
+  (+ (sum frame) (first (frames (inc idx))))) 
+    
+(defmethod score-frame :strike [frames idx frame]
+  (+ (sum frame) (first (frames (inc idx))) (second (frames (inc idx)))))
 
 (defn start-game! []
   (reset! frames [[]]))		
