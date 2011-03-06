@@ -34,8 +34,6 @@
 		:else
 	    (sum frame)))
    
-(defn- score-for-each-frame [frames]
-  (map-indexed (partial score-frame frames) frames))  
-   
 (defn score-game []
-  (sum (score-for-each-frame @frames)))
+  (let [score-for-each-frame (map-indexed (partial score-frame @frames) @frames)]
+    (sum score-for-each-frame)))
