@@ -21,9 +21,6 @@
       (conj frames [pins-hit])
 	  (replace-last frames (conj (last frames) pins-hit))))
   
-(defn- add-roll-to-frames! [pins-hit]
-  (swap! frames add-roll-to-frames pins-hit))
-  
 (defn- score-frame [frame next-frame third-frame]
   (cond (and (strike? frame) next-frame) 
 		(+ (sum frame) (first next-frame) (if (= 1 (count next-frame)) (first third-frame) (second next-frame)))
@@ -38,7 +35,7 @@
 		
 (defnk roll! [pins-hit :times 1]
   (dotimes [i times] 
-    (add-roll-to-frames! pins-hit))) 
+   (swap! frames add-roll-to-frames pins-hit))) 
    
 (defn score-game []
   (prn "frames: " @frames)
