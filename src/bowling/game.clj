@@ -23,12 +23,12 @@
 (defn- add-roll-to-frames! [pins-hit]
   (swap! frames add-roll-to-frames pins-hit))
   
-(defn- kind-of-roll [frames idx frame]
+(defn- kind-of-frame [frames idx frame]
   (cond (and (strike? frame) (< idx 9)) :strike
         (and (spare? frame) (< idx 9))  :spare
 		:else                           :standard))  
   
-(defmulti score-frame kind-of-roll)  
+(defmulti score-frame kind-of-frame)  
   
 (defmethod score-frame :standard [frames idx frame]
   (sum frame)) 
