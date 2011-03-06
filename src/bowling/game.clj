@@ -28,7 +28,7 @@
         (and (spare? frame) next-frame)  :spare
         :else                            :standard))  
   
-(defmulti score-frame kind-of-frame)  
+(defmulti #^{:private true} score-frame kind-of-frame)  
   
 (defmethod score-frame :standard [frame next-frame]
   (prn "standard...")
