@@ -16,33 +16,35 @@
 (defvar- strike? (partial all-pins-down-and-on-nth-roll? 1)) 
   
 (defn- add-roll-to-frames [frames pins-hit]  
-  (if (or (and (= 2 (count (last frames))) (not= 10 (count frames))) (strike? (last frames)))
+  (if (or (and (= 2 (count (last frames))) (not= 10 (count frames))) 
+          (and (strike? (last frames)) (not= 10 (count frames))))
       (conj frames [pins-hit])
 	  (replace-last frames (conj (last frames) pins-hit))))
   
 (defn- add-roll-to-frames! [pins-hit]
   (swap! frames add-roll-to-frames pins-hit))
   
-(defn- kind-of-frame [frame next-frame]
+(defn- kind-of-frame [frame next-frame _]
   (cond (and (strike? frame) next-frame) :strike
         (and (spare? frame) next-frame)  :spare
         :else                            :standard))  
   
 (defmulti #^{:private true} score-frame kind-of-frame)  
   
-(defmethod score-frame :standard [frame next-frame]
+(defmethod score-frame :standard [frame _ _]
   (prn "standard...")
   (sum frame)) 
 
-(defmethod score-frame :spare [frame next-frame]
+(defmethod score-frame :spare [frame next-frame _]
   (prn "spare...")
   (+ (sum frame) (first next-frame)))
     
-(defmethod score-frame :strike [frame next-frame]
+(defmethod score-frame :strike [frame next-frame third-frame]
   (prn "strike...")
-  (+ (sum frame) (first next-frame) (second next-frame)))
+  (+ (sum frame) (first next-frame) (if (= 1 (count next-frame)) (first third-frame) (second next-frame))))
 
 (defn start-game! []
+  (prn "starting game...")
   (reset! frames [[]]))		
 		
 (defnk roll! [pins-hit :times 1]
@@ -50,5 +52,7 @@
     (add-roll-to-frames! pins-hit))) 
    
 (defn score-game []
-  (let [next-frames (concat (rest @frames) [nil])]
-    (sum (map score-frame @frames next-frames))))
+  (prn "frames: " @frames)
+  (let [next-frames (concat (rest @frames) [nil])
+        third-frames (concat (rest next-frames) [nil])]
+    (sum (map score-frame @frames next-frames third-frames))))
