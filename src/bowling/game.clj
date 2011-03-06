@@ -24,24 +24,13 @@
 (defn- add-roll-to-frames! [pins-hit]
   (swap! frames add-roll-to-frames pins-hit))
   
-(defn- kind-of-frame [frame next-frame _]
-  (cond (and (strike? frame) next-frame) :strike
-        (and (spare? frame) next-frame)  :spare
-        :else                            :standard))  
-  
-(defmulti #^{:private true} score-frame kind-of-frame)  
-  
-(defmethod score-frame :standard [frame _ _]
-  (prn "standard...")
-  (sum frame)) 
-
-(defmethod score-frame :spare [frame next-frame _]
-  (prn "spare...")
-  (+ (sum frame) (first next-frame)))
-    
-(defmethod score-frame :strike [frame next-frame third-frame]
-  (prn "strike...")
-  (+ (sum frame) (first next-frame) (if (= 1 (count next-frame)) (first third-frame) (second next-frame))))
+(defn- score-frame [frame next-frame third-frame]
+  (cond (and (strike? frame) next-frame) 
+		(+ (sum frame) (first next-frame) (if (= 1 (count next-frame)) (first third-frame) (second next-frame)))
+        (and (spare? frame) next-frame)  
+		(+ (sum frame) (first next-frame))
+        :else 
+		(sum frame)))  
 
 (defn start-game! []
   (prn "starting game...")
