@@ -1,6 +1,11 @@
 (ns bowling.test.game
   (:use bowling.game)
+  (:use clojure.contrib.def)
   (:use midje.sweet))
+	
+(defnk roll [pins-hit :times 1]
+   (doseq [i (repeat times pins-hit)]
+    (score-roll i))) 	
 	
 (fact "score 0 when no pins knocked down for whole game"
   (start-game)
@@ -36,5 +41,3 @@
   (start-game)
   (roll 5 :times 21)
   (score-game) => 150)
-
-	

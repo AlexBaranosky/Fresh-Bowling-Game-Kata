@@ -10,30 +10,32 @@
   
 (defn start-game []
   (reset! frames [[]]))
+
+(defn- all-pins-down-and-on-nth-roll? [nth-roll frame]
+  (and (= nth-roll (count frame)) (= 10 (sum frame))))   
+	
+(defvar- spare? (partial all-pins-down-and-on-nth-roll? 2))
+
+(defvar- strike? (partial all-pins-down-and-on-nth-roll? 1)) 
   
-(defn add-roll [frames pins-hit]  
-  (if (= 2 (count (last frames)))
+(defn- add-roll-to-frames [frames pins-hit]  
+  (if (or (= 2 (count (last frames))) (strike? (last frames)))
       (conj frames [pins-hit])
 	  (replace-last frames (conj (last frames) pins-hit))))
   
-(defn- score-roll [pins-hit]
-  (swap! frames add-roll pins-hit))	
-  
-(defnk roll [pins-hit :times 1]
-   (doseq [i (repeat times pins-hit)]
-    (score-roll i))) 
-   
-(defn- spare? [frame]
-  (and (= 2 (count frame)) (= 10 (sum frame))))   
+(defn score-roll [pins-hit]
+  (swap! frames add-roll-to-frames pins-hit))
    
 (defn- score-frame [frames idx frame]
-  (if (and (spare? frame) (< idx 9))
-    (+ (sum frame) (first (get frames (inc idx))))
-	(sum frame)))
+  (cond (and (spare? frame) (< idx 9))
+        (+ (sum frame) (first (get frames (inc idx))))
+		(and (strike? frame) (< idx 9))
+        (+ (sum frame) (first (get frames (inc idx))) (second (get frames (inc idx))))
+		:else
+	    (sum frame)))
    
 (defn- score-for-each-frame [frames]
   (map-indexed (partial score-frame frames) frames))  
    
 (defn score-game []
-  (prn (count @frames))
   (sum (score-for-each-frame @frames)))
