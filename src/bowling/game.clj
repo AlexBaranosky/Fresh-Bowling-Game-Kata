@@ -28,9 +28,9 @@
    
 (defn- score-frame [frames idx frame]
   (cond (and (spare? frame) (< idx 9))
-        (+ (sum frame) (first (get frames (inc idx))))
+        (+ (sum frame) (first (frames (inc idx))))
 		(and (strike? frame) (< idx 9))
-        (+ (sum frame) (first (get frames (inc idx))) (second (get frames (inc idx))))
+        (+ (sum frame) (first (frames (inc idx))) (second (frames (inc idx))))
 		:else
 	    (sum frame)))
    
