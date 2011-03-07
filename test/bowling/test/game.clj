@@ -7,19 +7,19 @@
   (roll! 0 :times 20)
   (score-game) => 0)
 
-(fact "score 20 when every roll! knocks down 1 pin"
+(fact "score 20 when every roll knocks down 1 pin"
   (start-game!)
   (roll! 1 :times 20)
   (score-game) => 20)
 
-(fact "counts the roll! after a spare twice"
+(fact "counts the roll after a spare twice"
   (start-game!)
   (roll! 5 :times 2)
   (roll! 3)
   (roll! 0 :times 16)
   (score-game) => 16)
 
-(fact "counts the two roll!s afer a strike twice"
+(fact "counts the two rolls afer a strike twice"
   (start-game!)
   (roll! 10)
   (roll! 3)
