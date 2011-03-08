@@ -2,11 +2,9 @@
   
 (def ^{:private true} sum (partial reduce +))
 
-(defn spare? [rolls]
-  (= 10 (sum (take 2 rolls))))
+(def ^{:private true} spare? (comp (partial = 10) sum (partial take 2)))
 
-(defn strike? [rolls]
-  (= 10 (first rolls)))   
+(def ^{:private true} strike? (comp (partial = 10) first))  
    
 (defn rolls-to-advance [rolls frame]
     (cond (and (= 10 frame) (or (spare? rolls) (strike? rolls))) 3
