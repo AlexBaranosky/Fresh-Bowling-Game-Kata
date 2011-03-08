@@ -28,12 +28,15 @@
 (defnk roll! [pins-hit :times 1]
   (dotimes [i times] 
    (swap! rolls conj pins-hit))) 
-   
-(defn score-game []
-  (prn "rolls: " @rolls)
-  (loop [total 0 frame 1 rolls @rolls]
+	  
+(defn score-rolls [rolls]
+  (prn "rolls: " rolls)
+  (loop [total 0 frame 1 rolls rolls]
     (if (not (empty? rolls))
       (recur (+ total (sum (take (items-in-frame rolls) rolls)))
              (inc frame)
              (drop (rolls-to-advance rolls frame) rolls))
       total)))
+   
+(defn score-game []
+  (score-rolls @rolls))
