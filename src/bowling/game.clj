@@ -12,9 +12,9 @@
   (= 10 (first rolls)))   
    
 (defn rolls-to-advance [rolls frame]
-	(if (= 10 frame)
-	    (if (or (spare? rolls) (strike? rolls)) 3 2)
-        (if (strike? rolls) 1 2)))		
+    (cond (and (= 10 frame) (or (spare? rolls) (strike? rolls))) 3
+	      (strike? rolls) 1    
+		  :else 2))
 		     
 (defn items-in-frame [rolls]
   (cond (strike? rolls) 3
