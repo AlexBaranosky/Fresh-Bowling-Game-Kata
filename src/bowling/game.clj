@@ -1,9 +1,7 @@
 (ns bowling.game
   (:use clojure.contrib.def))
   
-(defvar- sum (partial reduce +))
-  
-(defvar- rolls (atom []))
+(def ^{:private true} sum (partial reduce +))
 
 (defn spare? [rolls]
   (= 10 (sum (take 2 rolls))))
@@ -19,15 +17,7 @@
 (defn items-in-frame [rolls]
   (cond (strike? rolls) 3
         (spare? rolls) 3
-        :else 2))
-   
-(defn start-game! []
-  (prn "starting game...")
-  (reset! rolls []))		
-		
-(defnk roll! [pins-hit :times 1]
-  (dotimes [i times] 
-   (swap! rolls conj pins-hit))) 
+        :else 2))		
 	  
 (defn score-rolls [rolls]
   (prn "rolls: " rolls)
@@ -37,6 +27,3 @@
              (inc frame)
              (drop (rolls-to-advance rolls frame) rolls))
       total)))
-   
-(defn score-game []
-  (score-rolls @rolls))
