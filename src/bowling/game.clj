@@ -6,12 +6,12 @@
 
 (def ^{:private true} strike? (comp (partial = 10) first))  
    
-(defn rolls-to-advance [rolls frame]
+(defn- rolls-to-advance [rolls frame]
     (cond (and (= 10 frame) (or (spare? rolls) (strike? rolls))) 3
 	      (strike? rolls) 1    
 		  :else 2))
 		     
-(defn items-in-frame [rolls]
+(defn- items-in-frame [rolls]
   (cond (strike? rolls) 3
         (spare? rolls) 3
         :else 2))		
