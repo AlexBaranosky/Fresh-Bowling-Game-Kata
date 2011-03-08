@@ -3,36 +3,19 @@
   (:use midje.sweet))	
 	
 (fact "score 0 when no pins knocked down for whole game"
-  (start-game!)
-  (roll! 0 :times 20)
-  (score-game) => 0)
+  (score-rolls (repeat 20 0)) => 0)
 
 (fact "score 20 when every roll knocks down 1 pin"
-  (start-game!)
-  (roll! 1 :times 20)
-  (score-game) => 20)
+   (score-rolls (repeat 20 1)) => 20)
 
 (fact "counts the roll after a spare twice"
-  (start-game!)
-  (roll! 5 :times 2)
-  (roll! 3)
-  (roll! 0 :times 16)
-  (score-game) => 16)
+  (score-rolls (concat [5 5 3] (repeat 16 0))) => 16)
 
 (fact "counts the two rolls afer a strike twice"
-  (start-game!)
-  (roll! 10)
-  (roll! 3)
-  (roll! 4)
-  (roll! 0 :times 16)
-  (score-game) => 24)
+  (score-rolls (concat [10 3 4] (repeat 16 0))) => 24)
 
 (fact "scores 300 for a perfect game: 12 strikes"
-  (start-game!)
-  (roll! 10 :times 12)
-  (score-game) => 300)
+  (score-rolls (repeat 12 10)) => 300)
 
 (fact "scores 150 for all fives (a spare each round)"
-  (start-game!)
-  (roll! 5 :times 21)
-  (score-game) => 150)
+  (score-rolls (repeat 21 5)) => 150)
