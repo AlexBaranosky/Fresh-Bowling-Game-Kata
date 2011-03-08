@@ -1,5 +1,4 @@
-(ns bowling.game
-  (:use clojure.contrib.def))
+(ns bowling.game)
   
 (def ^{:private true} sum (partial reduce +))
 
